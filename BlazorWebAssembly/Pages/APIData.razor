@@ -1,0 +1,59 @@
+﻿@page "/apidata"
+@inject HttpClient Http
+@inject IMovieService MovieService
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
+<h3>APIData</h3>
+
+<button class="btn btn-primary" @onclick="GetLocalCallBack">Click me (working)</button>
+
+<p>@callback</p>
+
+<button class="btn btn-primary" @onclick="GetImdbCallBackExt">Click me(working)</button>
+
+<p>@callbackExternal</p>
+
+<button class="btn btn-primary" @onclick="Deserialize">Click me(not working!)</button>
+@if (movie != null)
+{
+    <p>@movie.Title</p>
+}
+
+@code {
+    Movie movie = new Movie() { Title = "........." };
+    string json;
+    string callback = "...";
+    string callbackExternal = "...";
+
+    private async Task<Movie> GetMovie()
+    {
+        movie = await MovieService.GetMovie();
+        return movie;
+    }
+
+    private async Task GetLocalCallBack()
+    {
+        var requestMessage = new HttpRequestMessage();
+        requestMessage.Method = new HttpMethod("GET");
+        requestMessage.RequestUri = new Uri($"https://localhost:44319/");
+
+        var response = await Http.SendAsync(requestMessage);
+        callback = await response.Content.ReadAsStringAsync();
+    }
+
+    private async Task GetImdbCallBackExt()
+    {
+        var requestMessage = new HttpRequestMessage();
+        requestMessage.Method = new HttpMethod("GET");
+        requestMessage.RequestUri = new Uri($"https://www.omdbapi.com/?t=Avatar&apikey=SECRETCODE&plot=full&type=movie");
+
+        var response = await Http.SendAsync(requestMessage);
+        callbackExternal = await response.Content.ReadAsStringAsync();
+    }
+
+    private void Deserialize()
+    {
+        var m = JsonSerializer.Deserialize<Movie>(callbackExternal);
+        movie.Title = m.Title;
+    }
+}
