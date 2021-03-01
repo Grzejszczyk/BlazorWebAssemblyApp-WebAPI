@@ -18,7 +18,7 @@ namespace BlazorWebAssembly.Services
         public async Task<Movie> GetMovie()
         {
             Movie movie;
-            movie = await _http.GetFromJsonAsync<Movie>($"http://www.omdbapi.com/?t=Avatar&apikey=SECRETCODE&plot=full&type=movie");
+            movie = await _http.GetFromJsonAsync<Movie>($"http://www.omdbapi.com/?t=Avatar&apikey=SecretCode&plot=full&type=movie");
             return movie;
         }
     }

@@ -7,14 +7,16 @@ namespace BlazorWebAssembly.Models
 {
     public class Movie
     {
-        public string IMDbId { get; set; }
+        //Somewhere here is mistake which make unable deserialization!
+
+        //public string IMDbId { get; set; }
         public string Title { get; set; }
-        public int Year { get; set; }
-        public string Genre { get; set; }
-        public string Plot { get; set; }
-        public string Poster { get; set; }
-        public bool Response { get; set; }
-        public string Error { get; set; }
-        public string UrlException { get; set; }
+        //public int Year { get; set; }
+        //public string Genre { get; set; }
+        //public string Plot { get; set; }
+        //public string Poster { get; set; }
+        //public bool Response { get; set; }
+        //public string Error { get; set; }
+        //public string UrlException { get; set; }
     }
 }

@@ -14,13 +14,21 @@
 <p>@callbackExternal</p>
 
 <button class="btn btn-primary" @onclick="Deserialize">Click me(not working!)</button>
+@if (mt != null)
+{
+    <p>@mt.Title</p>
+}
+<p></p>
+<button class="btn btn-primary" @onclick="Deserialize2">Click me(not working!)</button>
 @if (movie != null)
 {
     <p>@movie.Title</p>
 }
 
 @code {
-    Movie movie = new Movie() { Title = "........." };
+    public Movie movie;
+    MovieTitle mt;
+
     string json;
     string callback = "...";
     string callbackExternal = "...";
@@ -45,7 +53,7 @@
     {
         var requestMessage = new HttpRequestMessage();
         requestMessage.Method = new HttpMethod("GET");
-        requestMessage.RequestUri = new Uri($"https://www.omdbapi.com/?t=Avatar&apikey=SECRETCODE&plot=full&type=movie");
+        requestMessage.RequestUri = new Uri($"https://www.omdbapi.com/?t=Avatar&apikey=secretCode&plot=full&type=movie");
 
         var response = await Http.SendAsync(requestMessage);
         callbackExternal = await response.Content.ReadAsStringAsync();
@@ -53,7 +61,16 @@
 
     private void Deserialize()
     {
-        var m = JsonSerializer.Deserialize<Movie>(callbackExternal);
-        movie.Title = m.Title;
+        mt = JsonSerializer.Deserialize<MovieTitle>(callbackExternal);
+    }
+
+    private void Deserialize2()
+    {
+        movie = JsonSerializer.Deserialize<BlazorWebAssembly.Models.Movie>(callbackExternal);
+    }
+
+    public class MovieTitle
+    {
+        public string Title { get; set; }
     }
 }
